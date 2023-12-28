@@ -1,0 +1,28 @@
+version: '3.7'
+
+services:
+  server:
+    build:
+      context: .
+      dockerfile: server.Dockerfile
+    environment:
+      SERVER_HOST: "0.0.0.0"
+      SERVER_PORT: '3001'
+      CACHE_HOST: "redis"
+      CACHE_PORT: '6379'
+    ports:
+      - '3001:3001'
+    image: nightlord189/tcp-pow-go/server:latest
+    restart: 'no'
+
+  client:
+    build:
+      context: .
+      dockerfile: client.Dockerfile
+    environment:
+      SERVER_HOST: "server"
+      SERVER_PORT: '3001'
+    image: nightlord189/tcp-pow-go/client:latest
+    restart: 'no'
+    depends_on:
+      - server
